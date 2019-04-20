@@ -4,41 +4,62 @@
 #include "node.h"
 
 template <typename Tr>
-class List {     
-    public:
-        typedef typename Tr::T T;
-        typedef typename Tr::Operation Operation;
-      
-    private:
-        Node<T>* head;
-        Operation cmp;
-              
-    public:
-        List() : head(nullptr) {};
+class List {
+public:
+    typedef typename Tr::T T;
+    typedef typename Tr::Operation Operation;
 
-        bool find(T search, Node<T> **&pointer) {
-            // TODO
-        }
-             
-        bool insert(T data) {
-            // TODO
-        }
-             
-        bool remove(T item) {
-            // TODO
-        }  
-             
-        int size() {
-            // TODO
-        }
+private:
+    Node<T>* head;
+    Operation cmp;
+    int nodes;
 
-        T operator[](int index) {
-            // TODO
-        }
+public:
+    List() : head(nullptr), nodes(0) {};
 
-        ~List() {
-            // TODO
-        }         
+    bool find(T search, Node<T> **&pointer) {
+        pointer = &head;
+        while (*pointer != NULL && !cmp(search, (*pointer)->data))
+            pointer = &((*pointer)->next);
+        return *pointer != NULL && (*pointer)->data == search;
+    }
+
+    bool insert(T data) {
+        Node<T> *newNode = new Node<T>(data);
+        Node<T> **tempNode;
+        if (find(data, tempNode)) return false;
+
+        newNode->next = *tempNode;
+        *tempNode = newNode;
+        ++nodes;
+        return true;
+    }
+
+    bool remove(T item) {
+        Node<T> **tempNode;
+        if (find(item, tempNode)) return false;
+
+        Node<T> *newNode = *tempNode;
+        *tempNode = (*tempNode)->next;
+        --nodes;
+        delete newNode;
+        return true;
+    }
+
+    int size() {
+        return nodes;
+    }
+
+    T operator[](int index) {
+        Node<T> *tempNode = head;
+        for (int i = 0; i < index; i++)
+            tempNode = tempNode->next;
+        return tempNode->data ;
+    }
+
+    ~List() {
+        head->killSelf();
+    }
 };
 
 #endif
