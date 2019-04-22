@@ -37,7 +37,7 @@ public:
 
     bool remove(T item) {
         Node<T> **tempNode;
-        if (find(item, tempNode)) return false;
+        if (!find(item, tempNode)) return false;
 
         Node<T> *newNode = *tempNode;
         *tempNode = (*tempNode)->next;
