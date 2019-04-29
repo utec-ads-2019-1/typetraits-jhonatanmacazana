@@ -58,6 +58,7 @@ public:
     }
 
     ~List() {
+	// Falta controlar cuando head es null, si la lista está vacía
         head->killSelf();
     }
 };
